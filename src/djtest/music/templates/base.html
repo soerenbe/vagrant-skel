@@ -1,0 +1,62 @@
+{% load staticfiles %}
+{% load bootstrap3 %}
+{% load render_table from django_tables2 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery=1 %}
+{% load menu %}{% generate_menu %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="de" xml:lang="de">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}" />
+        <title>Example Page</title>
+    </head>
+    <body>
+    <div class="container-fluid" id="example-page">
+        <div class="row" id="example-header" style="background-image:url({% static "img/headergrafik.jpg" %}); background-repeat: no-repeat">
+            <div class="row clearfix">
+                <div class="col-md-12 column">
+                    <h1>My Homepage</h1>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                      </button>
+                      <a class="navbar-brand" href="/">My Project</a>
+                    </div>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            {% with menu=menus.music title="Music" %}{% include "menu.html" %}{% endwith %}
+                        </ul>
+                    </div><!-- /.navbar-collapse -->
+                </div><!-- /.container-fluid -->
+            </nav>
+            <div class="col-md-12">
+                {% bootstrap_messages %}
+                <h1>{% block page_title %}Template Page Title{% endblock %}</h1>
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+        <div id="push"></div>
+    </div>
+
+    <div id="footer">
+        <div class="container">
+            <p class="text-muted">
+                Some fancy footer
+            </p>
+        </div>
+    </div>
+    </body>
+</html>

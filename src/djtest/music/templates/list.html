@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% load render_table from django_tables2 %}
+{% load bootstrap3 %}
+{% block page_title %}{{ view.title }}{% endblock %}
+{% block content %}
+{% render_table table %}
+{% endblock %}
