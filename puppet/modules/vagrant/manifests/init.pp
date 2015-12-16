@@ -18,6 +18,7 @@ class vagrant (
   }
   exec {'set_hostname':
     command     => 'hostname -F /etc/hostname',
+    path        => '/bin',
     subscribe   => File['/etc/hostname'],
     refreshonly => true
   }
