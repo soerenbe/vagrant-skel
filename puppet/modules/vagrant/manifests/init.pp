@@ -17,7 +17,7 @@ class vagrant (
       require  => Exec['set_hostname'];
   }
   exec {'set_hostname':
-    command     => '/etc/init.d/hostname.sh',
+    command     => 'hostname -F /etc/hostname',
     subscribe   => File['/etc/hostname'],
     refreshonly => true
   }
