@@ -27,7 +27,7 @@ class vagrant::python::django (
     'django_simple_menu',
     'ipaddress',
   ],
-) inherits vagrant::params {
+) {
   class { 'vagrant::python::venv':
     virtualenv => $virtualenv
   }
