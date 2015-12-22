@@ -22,12 +22,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
   # For a basic setup we run some provisioning scripts. For basic usage simply use the shiped bootstrap.sh
   config.vm.provision "shell", path: "scripts/bootstrap.sh"
+
   # If we want to use puppet we may execute a additional provisioning script.
   # We have to ensure that it is installed in the virtual machine. We also install some additional modules from puppetlabs there
   # If you don't use puppet for provisioning you can comment out this provisioning script.
   config.vm.provision "shell", path: "scripts/puppet.sh"
-  # If you don't use the django basic app you can comment out this provisioning script.
-  #config.vm.provision "shell", path: "scripts/django.sh"
 
   # We define exactly one machine.
   # For advanced multi machine setups have a look at: https://docs.vagrantup.com/v2/multi-machine/index.html
@@ -55,6 +54,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # You also can mount your normal hiera envionment from somewhere else like
     # default.vm.synced_folder("/home/user/puppet/hiera", "/etc/puppet/hiera")
     default.vm.synced_folder("puppet/hiera", "/etc/puppet/hiera")
+    default.vm.synced_folder("src/djtest", "/home/vagrant/djtest")
     
     default.vm.provision :puppet do |puppet|
       # If you have your own modules for your project you can put it in the puppet/modules directory. You can also add some

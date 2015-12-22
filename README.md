@@ -15,6 +15,19 @@ $ vagrant ssh
 ```
 to have a basic virtual machine.
 
+## How it works
+
+The bootstrap of the virtual machine is processed in following steps:
+
+* Importing the BOX
+* Starting a new instance of the virtual machine
+* Execute the `sripts/bootstrap.sh` script
+* [Optional] Puppet deployment
+    * Execute the `scripts/puppet.sh` script to install additional modules. See bellow
+    * Running puppet using `puppet/manifests/site.pp`. You may customize this file
+    * Also have a look at `puppet/hiera/vagrant.yaml` for basic puppet class setup
+
+
 ## Additional puppetlabs modules
 Add `scripts/puppet.sh` to your to your provisioning scripts to install additional [puppetlabs](https://forge.puppetlabs.com/) modules. This feature is enabled by default:
 ```ruby
