@@ -16,11 +16,11 @@ urlpatterns = [
 
 try:
     user, created = User.objects.get_or_create(username='admin')
-    user.set_password('admin')
-    user.is_staff = True
-    user.is_superuser = True
-    user.save()
     if created:
+        user.set_password('admin')
+        user.is_staff = True
+        user.is_superuser = True
+        user.save()
         print("Created admin/admin")
 except:
     pass
