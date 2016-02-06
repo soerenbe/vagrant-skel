@@ -11,6 +11,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #config.vm.box = "ubuntu/trusty64"
   #config.vm.box = "ubuntu/precise64"
   
+  # Workaround to skip nasty tty errors during provisioning
+  config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"  
   # We are using the virtualbox provider. Feel free to match the number of CPUs and the memory to your needs
   config.vm.provider "virtualbox" do |vbox|
     vbox.memory = 512
@@ -20,14 +22,30 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     vbox.customize ["modifyvm", :id, "--usb", "off"]
     vbox.customize ["modifyvm", :id, "--usbehci", "off"]
   end
-  # For a basic setup we run some provisioning scripts. For basic usage simply use the shiped bootstrap.sh
-  config.vm.provision "shell", path: "scripts/bootstrap.sh"
+  # For a basic setup we run a basic 'apt-get update' That ensure that all the correct packages are available if you got into the VM
+  config.vm.provision :shell, :inline => "test -e /var/cache/apt-updated || apt-get update"
+  config.vm.provision :shell, :inline => "test -e /var/cache/apt-updated && echo 'Skipping apt-get update. /var/cache/apt-updated exists' || /bin/true"
+  config.vm.provision :shell, :inline => "touch /var/cache/apt-updated"
 
   # If we want to use puppet we may execute a additional provisioning script.
   # We have to ensure that it is installed in the virtual machine. We also install some additional modules from puppetlabs there
-  # If you don't use puppet for provisioning you can comment out this provisioning script.
-  config.vm.provision "shell", path: "scripts/puppet.sh"
+  # If you don't use puppet for provisioning you can comment out the following lines.  
+  config.vm.provision :shell, :inline => "test -e /usr/bin/puppet || apt-get install -y puppet"
+  config.vm.provision :shell, :inline => "mkdir -p /etc/puppet/modules"
+  config.vm.provision :shell, :inline => "mkdir -p /etc/puppet/hiera"
+  config.vm.provision :shell, :inline => "test -e /etc/puppet/modules/locales || puppet module install saz-locales"
+  #config.vm.provision :shell, :inline => "test -e /etc/puppet/modules/apache || puppet module install puppetlabs-apache"
+  #config.vm.provision :shell, :inline => "test -e /etc/puppet/modules/postgresql || puppet module install puppetlabs-postgresql"
+  #config.vm.provision :shell, :inline => "test -e /etc/puppet/modules/mysql || puppet module install puppetlabs-mysql"
+  #config.vm.provision :shell, :inline => "test -e /etc/puppet/modules/logrotate || puppet module install rodjek-logrotate"
+  #config.vm.provision :shell, :inline => "test -e /etc/puppet/modules/python || puppet module install stankevich-python"
+  #config.vm.provision :shell, :inline => "test -e /etc/puppet/modules/rabbitmq || puppet module install puppetlabs-rabbitmq"
 
+  # You can also add a provisioning script it should be located in the root repository directory (or a relative path
+  # config.vm.provision "shell", path: "myscript.sh"
+  # config.vm.provision "shell", path: "myscripts/bootstrap.sh"
+  # config.vm.provision "shell", path: "myscripts/install_my_app.sh"
+  
   # We define exactly one machine.
   # For advanced multi machine setups have a look at: https://docs.vagrantup.com/v2/multi-machine/index.html
   config.vm.define "default" do |default|
