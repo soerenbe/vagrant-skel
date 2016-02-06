@@ -29,12 +29,12 @@ class ArtistTable(CustomTable):
 
 class TitleTable(CustomTable):
     class Meta(CustomTable.Meta):
-        model = Artist
+        model = Title
 
 
 class AlbumTable(CustomTable):
     class Meta(CustomTable.Meta):
-        model = Artist
+        model = Album
 
 
 class ArtistListView(TemplateView):
@@ -53,7 +53,7 @@ class TitleListView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(TitleListView, self).get_context_data(**kwargs)
-        context['table'] = TitleTable(Artist.objects.all())
+        context['table'] = TitleTable(Title.objects.all())
         return context
 
 
@@ -63,5 +63,5 @@ class AlbumListView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(AlbumListView, self).get_context_data(**kwargs)
-        context['table'] = AlbumTable(Artist.objects.all())
+        context['table'] = AlbumTable(Album.objects.all())
         return context
